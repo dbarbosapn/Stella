@@ -1,0 +1,75 @@
+﻿<Window x:Class="Stella.Dialogs.SelectCustomerDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="SelectCustomerDialog" Height="400" Width="500" WindowStyle="None"
+        xmlns:locale="clr-namespace:Stella.Locale"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border BorderThickness="1" BorderBrush="LightPink">
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <TextBlock FontSize="16" FontWeight="DemiBold" Grid.Row="0" Grid.Column="0" Text="{x:Static locale:Locale.select_customer}" />
+            <TextBox Grid.Row="1" Grid.Column="0" TextChanged="CustomerSearch_TextChanged" x:Name="CustomerSearch" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="{x:Static locale:Locale.search_customer}" />
+
+            <ListView x:Name="CustomerList" Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" SelectionChanged="CustomerList_SelectionChanged">
+                <ListView.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Text }" />
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type GridViewColumnHeader}}" TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="TextElement.FontSize"
+                                Value="13" />
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+
+                        <GridViewColumn Header="Id" Width="0" DisplayMemberBinding="{Binding Id}" />
+                        <GridViewColumn Header="#" Width="Auto" DisplayMemberBinding="{Binding Number}" />
+                        <GridViewColumn Header="{x:Static locale:Locale.name}" Width="Auto" DisplayMemberBinding="{Binding Name}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">
+                <Button Click="SelectButton_Click" Margin="0,0,20,0" IsEnabled="False" Style="{StaticResource MaterialDesignFlatButton}" x:Name="SelectButton" Content="{x:Static locale:Locale.select}" />
+                <Button Click="CancelButton_Click" Style="{StaticResource MaterialDesignFlatButton}" x:Name="CancelButton" Content="{x:Static locale:Locale.cancel}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,70 @@
+﻿<Page x:Class="Stella.Pages.Content.ServicesContent"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="720" d:DesignWidth="1100"
+      Title="ServicesContent"
+      xmlns:locale="clr-namespace:Stella.Locale"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      
+      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+      TextElement.FontWeight="Regular"
+      TextElement.FontSize="16"
+      TextOptions.TextFormattingMode="Ideal" 
+      TextOptions.TextRenderingMode="Auto"        
+      Background="{DynamicResource MaterialDesignPaper}">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="80" />
+        </Grid.RowDefinitions>
+
+        <ListView x:Name="ServiceList" Grid.Row="0" Grid.Column="0" Margin="20" SelectionChanged="ServiceList_SelectionChanged">
+            <ListView.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Text }" />
+                </Style>
+            </ListView.Resources>
+            
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style BasedOn="{StaticResource {x:Type GridViewColumnHeader}}" TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+
+                    <GridViewColumn Header="Id" Width="0" DisplayMemberBinding="{Binding Id}" />
+                    <GridViewColumn Header="{x:Static locale:Locale.name}" Width="400" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="{x:Static locale:Locale.notes}" Width="400" DisplayMemberBinding="{Binding SerializedNotes}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <TextBox TextChanged="ServiceSearch_TextChanged" Margin="80,0" x:Name="ServiceSearch" Grid.Row="1" Grid.Column="0" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="{x:Static locale:Locale.search_service}" />
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+            <Button Click="AddService_Click" x:Name="AddService" Style="{StaticResource MaterialDesignOutlinedButton}" Content="{x:Static locale:Locale.add_service}" Margin="10" />
+            <Button Click="EditService_Click" x:Name="EditService" Style="{StaticResource MaterialDesignOutlinedButton}" Content="{x:Static locale:Locale.edit_service}" Margin="10" IsEnabled="False" />
+            <Button Click="RemoveService_Click" x:Name="RemoveService" Style="{StaticResource MaterialDesignOutlinedButton}" Content="{x:Static locale:Locale.remove_service}" Margin="10" IsEnabled="False" />
+        </StackPanel>
+    </Grid>
+</Page>

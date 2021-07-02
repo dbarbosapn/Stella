@@ -1,0 +1,46 @@
+﻿<Window x:Class="Stella.Dialogs.ConfirmationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ConfirmationDialog" Height="150" Width="300" WindowStyle="None"
+        xmlns:locale="clr-namespace:Stella.Locale"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border BorderThickness="1" BorderBrush="LightPink">
+        <Grid>
+            <Grid Margin="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static locale:Locale.are_you_sure}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="18" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center">
+                    <Button Click="ConfirmButton_Click" x:Name="ConfirmButton" Content="{x:Static locale:Locale.confirm}" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,20,0" />
+                    <Button Click="CancelButton_Click" x:Name="CancelButton" Content="{x:Static locale:Locale.cancel}" Style="{StaticResource MaterialDesignFlatButton}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

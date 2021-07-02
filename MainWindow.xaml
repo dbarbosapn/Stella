@@ -1,0 +1,42 @@
+﻿<Window x:Class="Stella.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Stella" Height="720" Width="1280" WindowStyle="None" AllowsTransparency="True" ResizeMode="NoResize"
+        
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="Transparent" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles/Buttons.xaml"></ResourceDictionary>
+    </Window.Resources>
+    
+    
+    <Border CornerRadius="5" Background="{DynamicResource MaterialDesignPaper}" BorderBrush="Gray" BorderThickness="0.3">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Border Background="Transparent" x:Name="TopRow" Grid.Row="0" Grid.Column="0" MouseDown="TopRow_MouseDown" />
+            <Button Cursor="Hand" Click="MinimizeButton_Click" Style="{StaticResource ImageButtonStyle}" Grid.Column="0" x:Name="MinimizeButton" Width="12" Height="12" HorizontalAlignment="Right" Margin="5,10,40,5">
+                <materialDesign:PackIcon Kind="WindowMinimize" Background="Transparent" />
+            </Button>
+            <Button Cursor="Hand" Click="CloseButton_Click" Style="{StaticResource ImageButtonStyle}" Grid.Column="0" x:Name="CloseButton" Width="12" Height="12" HorizontalAlignment="Right" Margin="5,10,10,5">
+                <materialDesign:PackIcon Kind="Close" Background="Transparent" />
+            </Button>
+            <Frame Margin="10" Grid.Row="1" Grid.Column="0" x:Name="MainFrame" NavigationUIVisibility="Hidden" />
+            <Frame Margin="10" Grid.Row="1" Grid.Column="0" x:Name="LoadingFrame" NavigationUIVisibility="Hidden" />
+            <materialDesign:Snackbar Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Bottom" x:Name="Snackbar" MessageQueue="{materialDesign:MessageQueue}" />
+        </Grid>
+    </Border>
+</Window>

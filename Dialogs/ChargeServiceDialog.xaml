@@ -1,0 +1,96 @@
+﻿<Window x:Class="Stella.Dialogs.ChargeServiceDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ChargeServiceDialog" Height="720" Width="500" WindowStyle="None"
+        xmlns:locale="clr-namespace:Stella.Locale"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" ShowInTaskbar="False">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ListView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DatePicker.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TimePicker.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border BorderThickness="1" BorderBrush="LightPink">
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="160" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+
+            <TextBlock FontSize="16" FontWeight="DemiBold" Grid.Row="0" Grid.Column="0" Text="{x:Static locale:Locale.charge_service}" />
+            <TextBox Grid.Row="1" Grid.Column="0" TextChanged="ServiceSearch_TextChanged" x:Name="ServiceSearch" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="{x:Static locale:Locale.search_service}" />
+
+            <ListView x:Name="RecordList" Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" SelectionChanged="RecordList_SelectionChanged">
+                <ListView.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                        <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Self}, Path=Text }" />
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style BasedOn="{StaticResource {x:Type GridViewColumnHeader}}" TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="TextElement.FontSize"
+                                Value="13" />
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+
+                        <GridViewColumn Header="{x:Static locale:Locale.name}" Width="Auto" DisplayMemberBinding="{Binding ServiceName}" />
+                        <GridViewColumn x:Name="QuantityColumn" Header="#" Width="Auto" DisplayMemberBinding="{Binding Count}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <CheckBox Checked="SingleCharge_Checked" Unchecked="SingleCharge_Checked" x:Name="SingleCharge" Grid.Row="3" Grid.Column="0" Style="{StaticResource MaterialDesignCheckBox}" Content="{x:Static locale:Locale.single_charge}" />
+
+            <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <DatePicker
+                    Margin="0,0,20,0"
+                    Width="150"
+                    x:Name="ChargeDatePicker"
+                    materialDesign:HintAssist.Hint="{x:Static locale:Locale.date}"
+                    Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+                <materialDesign:TimePicker
+                    Width="150"
+                    x:Name="ChargeTimePicker"
+                    materialDesign:HintAssist.Hint="{x:Static locale:Locale.time}"
+                    Style="{StaticResource MaterialDesignFloatingHintTimePicker}"/>
+            </StackPanel>
+            
+            <TextBox Grid.Row="5" Grid.Column="0" x:Name="NotesBox" materialDesign:HintAssist.Hint="{x:Static locale:Locale.notes}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextWrapping="Wrap" AcceptsReturn="True" Height="130" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" />
+
+            <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Center">
+                <Button Click="ConfirmButton_Click" Margin="0,0,20,0" IsEnabled="False" Style="{StaticResource MaterialDesignFlatButton}" x:Name="ConfirmButton" Content="{x:Static locale:Locale.confirm}" />
+                <Button Click="CancelButton_Click" Style="{StaticResource MaterialDesignFlatButton}" x:Name="CancelButton" Content="{x:Static locale:Locale.cancel}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
