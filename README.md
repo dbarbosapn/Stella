@@ -4,6 +4,8 @@
 
 Stella is a simple customer management for small businesses. The idea came from the necessity by a specific store to manage its customers in a simple way, giving up on the hundreds of papers and archives that were at the store.
 
+It is currently available in English and Portuguese.
+
 ## How to use?
 
 To start using Stella, you may request me a free token, to insert in the authentication window.
