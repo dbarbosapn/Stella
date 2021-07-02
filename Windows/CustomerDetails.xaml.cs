@@ -3,9 +3,9 @@ using Stella.Dialogs;
 using Stella.Helper;
 using Stella.Models;
 using Stella.Pages;
-using System;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace Stella.Windows
 {
@@ -24,6 +24,8 @@ namespace Stella.Windows
             InitializeComponent();
             Title = $"{Title} - {Locale.Locale.customer_details}";
             LoadingFrame.Content = new LoadingPage();
+
+            TransactionDatePicker.Language = XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag);
 
             LoadCustomerInfo();
             LoadServicesAvailable();
