@@ -5,6 +5,17 @@ namespace Stella.Models
     public class Transaction
     {
         public string Id { get; set; }
+
+
+        public bool SingleCharge {
+            get { return _singleCharge; }
+            set {
+                SerializedSingleCharge = value ? Locale.Locale.yes : Locale.Locale.no;
+                _singleCharge = value;
+            }
+        }
+        private bool _singleCharge;
+
         public DateTime? Date {
             get { return _date; }
             set {
@@ -32,13 +43,15 @@ namespace Stella.Models
 
         public string SerializedDate { get; private set; }
         public string SerializedNotes { get; private set; }
+        public string SerializedSingleCharge { get; private set; }
 
-        public Transaction(string id, DateTime? date, string serviceName, string notes)
+        public Transaction(string id, DateTime? date, string serviceName, bool singleCharge, string notes)
         {
             Id = id;
             Date = date;
             ServiceName = serviceName;
             Notes = notes;
+            SingleCharge = singleCharge;
         }
     }
 }

@@ -457,6 +457,15 @@ namespace Stella.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string no {
+            get {
+                return ResourceManager.GetString("no", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notes.
         /// </summary>
         public static string notes {
@@ -705,6 +714,15 @@ namespace Stella.Locale {
         public static string welcome {
             get {
                 return ResourceManager.GetString("welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string yes {
+            get {
+                return ResourceManager.GetString("yes", resourceCulture);
             }
         }
     }

@@ -353,12 +353,13 @@ namespace Stella.API
         /// Adds transaction using the API.
         /// </summary>
         /// <returns>True if added successfully, false otherwise</returns>
-        public async void AddTransaction(string customerId, string serviceName, DateTime date, string notes, Action<bool> callback)
+        public async void AddTransaction(string customerId, string serviceName, DateTime date, bool single, string notes, Action<bool> callback)
         {
             var body = new JObject();
             body["customer"] = customerId;
             body["service"] = serviceName;
             body["date"] = $"{date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}";
+            if(single) body["single"] = true;
             body["notes"] = notes;
 
             var httpRes = await httpClient
@@ -389,6 +390,7 @@ namespace Stella.API
                         (string)obj["_id"],
                         (DateTime?)obj["date"],
                         (string)obj["service"],
+                        (bool)obj["single"],
                         (string)obj["notes"]);
 
                     list.Add(t);

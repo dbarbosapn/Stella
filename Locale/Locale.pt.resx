@@ -333,4 +333,10 @@
   <data name="transactions" xml:space="preserve">
     <value>Transações</value>
   </data>
+  <data name="no" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="yes" xml:space="preserve">
+    <value>Sim</value>
+  </data>
 </root>

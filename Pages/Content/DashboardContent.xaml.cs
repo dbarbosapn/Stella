@@ -105,7 +105,7 @@ namespace Stella.Pages.Content
                         Client.Instance.RemoveRecord(w.SelectedId, (removed) =>
                         {
                             if (removed)
-                                FinishTransaction(cid, w.SelectedServiceName, w.SelectedDateTime, w.Notes);
+                                FinishTransaction(cid, w.SelectedServiceName, false, w.SelectedDateTime, w.Notes);
                             else
                                 WindowHelper.Instance.RunOnUIThread(() =>
                                 {
@@ -114,7 +114,7 @@ namespace Stella.Pages.Content
                                 });
                         });
                     }
-                    else FinishTransaction(cid, w.SelectedServiceName, w.SelectedDateTime, w.Notes);
+                    else FinishTransaction(cid, w.SelectedServiceName, true, w.SelectedDateTime, w.Notes);
                 }
             }
         }
@@ -122,9 +122,9 @@ namespace Stella.Pages.Content
         /// <summary>
         /// Adds transaction to the database and shows snackbar
         /// </summary>
-        private void FinishTransaction(string customerId, string serviceName, DateTime date, string notes)
+        private void FinishTransaction(string customerId, string serviceName, bool single, DateTime date, string notes)
         {
-            Client.Instance.AddTransaction(customerId, serviceName, date, notes, (added) =>
+            Client.Instance.AddTransaction(customerId, serviceName, date, single, notes, (added) =>
             {
                 WindowHelper.Instance.RunOnUIThread(() =>
                 {

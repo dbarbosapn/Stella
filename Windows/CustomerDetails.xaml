@@ -161,6 +161,7 @@
 
                                 <GridViewColumn Header="{x:Static locale:Locale.date}" Width="Auto" DisplayMemberBinding="{Binding SerializedDate}" />
                                 <GridViewColumn Header="{x:Static locale:Locale.service}" Width="Auto" DisplayMemberBinding="{Binding ServiceName}" />
+                                <GridViewColumn Header="{x:Static locale:Locale.single_charge}" Width="Auto" DisplayMemberBinding="{Binding SerializedSingleCharge}" />
                             </GridView>
                         </ListView.View>
                     </ListView>
