@@ -511,6 +511,42 @@ namespace Stella.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stella Reader connected!.
+        /// </summary>
+        public static string reader_found {
+            get {
+                return ResourceManager.GetString("reader_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stella Reader not found. You may try again on the Settings page..
+        /// </summary>
+        public static string reader_not_found {
+            get {
+                return ResourceManager.GetString("reader_not_found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status: .
+        /// </summary>
+        public static string reader_status {
+            get {
+                return ResourceManager.GetString("reader_status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reconnect.
+        /// </summary>
+        public static string reconnect {
+            get {
+                return ResourceManager.GetString("reconnect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Record edited successfully!.
         /// </summary>
         public static string record_edited {
@@ -669,6 +705,15 @@ namespace Stella.Locale {
         public static string single_charge {
             get {
                 return ResourceManager.GetString("single_charge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stella Reader.
+        /// </summary>
+        public static string stella_reader {
+            get {
+                return ResourceManager.GetString("stella_reader", resourceCulture);
             }
         }
         

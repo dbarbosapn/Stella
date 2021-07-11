@@ -1,6 +1,7 @@
 ﻿using Stella.API;
 using Stella.Helper;
 using Stella.Pages;
+using System;
 using System.Windows;
 
 namespace Stella
@@ -36,6 +37,26 @@ namespace Stella
                         MainFrame.Content = new AuthenticationPage();
                     }
                     WindowHelper.Instance.SetLoading(false);
+                });
+            });
+
+            LoadReader();
+        }
+
+        private void LoadReader()
+        {
+            RFIDHelper.Instance.ScanReader(() =>
+            {
+                WindowHelper.Instance.RunOnUIThread(() =>
+                {
+                    WindowHelper.Instance.ShowSnackbar(Locale.Locale.reader_found);
+                });
+            },
+            () =>
+            {
+                WindowHelper.Instance.RunOnUIThread(() =>
+                {
+                    WindowHelper.Instance.ShowSnackbar(Locale.Locale.reader_not_found);
                 });
             });
         }
