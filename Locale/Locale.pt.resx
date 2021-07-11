@@ -345,6 +345,9 @@
   <data name="reader_not_found" xml:space="preserve">
     <value>Leitor Stella não encontrado. Pode tentar de novo nas Definições.</value>
   </data>
+  <data name="card" xml:space="preserve">
+    <value>Cartão: </value>
+  </data>
   <data name="reader_status" xml:space="preserve">
     <value>Estado: </value>
   </data>

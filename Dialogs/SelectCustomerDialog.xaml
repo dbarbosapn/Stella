@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="SelectCustomerDialog" Height="400" Width="500" WindowStyle="None"
+        Title="SelectCustomerDialog" Height="450" Width="500" WindowStyle="None"
         xmlns:locale="clr-namespace:Stella.Locale"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         
@@ -33,15 +33,19 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="25" />
+                <RowDefinition Height="25" />
                 <RowDefinition Height="50" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
-            <TextBlock FontSize="16" FontWeight="DemiBold" Grid.Row="0" Grid.Column="0" Text="{x:Static locale:Locale.select_customer}" />
-            <TextBox Grid.Row="1" Grid.Column="0" TextChanged="CustomerSearch_TextChanged" x:Name="CustomerSearch" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="{x:Static locale:Locale.search_customer}" />
+            <materialDesign:PackIcon Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Kind="CreditCardContactless" Height="25" Width="25" Foreground="LightPink" />
 
-            <ListView x:Name="CustomerList" Grid.Row="2" Grid.Column="0" Margin="0,10,0,0" SelectionChanged="CustomerList_SelectionChanged">
+
+            <TextBlock FontSize="16" FontWeight="DemiBold" Grid.Row="1" Grid.Column="0" Text="{x:Static locale:Locale.select_customer}" />
+            <TextBox Grid.Row="2" Grid.Column="0" TextChanged="CustomerSearch_TextChanged" x:Name="CustomerSearch" Style="{StaticResource MaterialDesignFloatingHintTextBox}" materialDesign:HintAssist.Hint="{x:Static locale:Locale.search_customer}" />
+
+            <ListView x:Name="CustomerList" Grid.Row="3" Grid.Column="0" Margin="0,10,0,0" SelectionChanged="CustomerList_SelectionChanged">
                 <ListView.Resources>
                     <Style TargetType="TextBlock">
                         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -66,7 +70,7 @@
                 </ListView.View>
             </ListView>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center">
                 <Button Click="SelectButton_Click" Margin="0,0,20,0" IsEnabled="False" Style="{StaticResource MaterialDesignFlatButton}" x:Name="SelectButton" Content="{x:Static locale:Locale.select}" />
                 <Button Click="CancelButton_Click" Style="{StaticResource MaterialDesignFlatButton}" x:Name="CancelButton" Content="{x:Static locale:Locale.cancel}" />
             </StackPanel>

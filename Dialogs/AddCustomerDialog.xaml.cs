@@ -1,4 +1,6 @@
-﻿using Stella.Models;
+﻿using Stella.Helper;
+using Stella.Models;
+using System;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +20,18 @@ namespace Stella.Dialogs
             InitializeComponent();
 
             BirthdatePicker.Language = XmlLanguage.GetLanguage(System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag);
+
+            RFIDHelper.Instance.OnReaderDataReceived += OnReaderValue;
+        }
+
+        private void OnReaderValue(string value)
+        {
+            if (value != "")
+            {
+                RFIDHelper.Instance.PositiveSignal();
+                CardLabel.Text = value;
+            }
+            else RFIDHelper.Instance.NegativeSignal();
         }
 
         /// <summary>
@@ -42,7 +56,7 @@ namespace Stella.Dialogs
             if (int.TryParse(NumberBox.Text, out tmp))
                 number = tmp;
 
-            Result = new Customer("", NameBox.Text, number, AddressBox.Text, PhoneBox.Text, EmailBox.Text, ((ComboBoxItem)GenderSelector.SelectedItem).Tag.ToString(), date, NotesBox.Text);
+            Result = new Customer("", CardLabel.Text, NameBox.Text, number, AddressBox.Text, PhoneBox.Text, EmailBox.Text, ((ComboBoxItem)GenderSelector.SelectedItem).Tag.ToString(), date, NotesBox.Text);
 
             Close();
         }
@@ -85,6 +99,7 @@ namespace Stella.Dialogs
         public void SetEdit(Customer c)
         {
             NameBox.Text = c.Name;
+            CardLabel.Text = c.Card;
             NumberBox.Text = c.Number.ToString();
             AddressBox.Text = c.Address;
             PhoneBox.Text = c.Phone;

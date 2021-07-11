@@ -345,6 +345,9 @@
   <data name="reader_not_found" xml:space="preserve">
     <value>Stella Reader not found. You may try again on the Settings page.</value>
   </data>
+  <data name="card" xml:space="preserve">
+    <value>Card: </value>
+  </data>
   <data name="reader_status" xml:space="preserve">
     <value>Status: </value>
   </data>

@@ -1,7 +1,6 @@
 ﻿using Stella.API;
 using Stella.Dialogs;
 using Stella.Helper;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 

@@ -172,7 +172,8 @@ namespace Stella.API
                 foreach (var obj in arr.Children<JObject>())
                 {
                     Customer c = new Customer(
-                        (string)obj["_id"], 
+                        (string)obj["_id"],
+                        (string)obj["card"],
                         (string)obj["name"],
                         (int?)obj["number"],
                         (string)obj["address"],
@@ -209,6 +210,42 @@ namespace Stella.API
 
                 Customer c = new Customer(
                     (string)obj["_id"],
+                    (string)obj["card"],
+                    (string)obj["name"],
+                    (int?)obj["number"],
+                    (string)obj["address"],
+                    (string)obj["phone"],
+                    (string)obj["email"],
+                    (string)obj["gender"],
+                    (DateTime?)obj["birthdate"],
+                    (string)obj["notes"]
+                );
+
+                callback(c);
+            }
+            else
+            {
+                callback(null);
+            }
+        }
+
+        /// <summary>
+        /// Retrieves a single customer using card from the API
+        /// </summary>
+        public async void GetCustomerCard(string card, Action<Customer> callback)
+        {
+            var httpRes = await httpClient
+                .GetAsync($"get-customer-card?token={token}&card={card}")
+                .ConfigureAwait(false);
+
+            if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string res = await httpRes.Content.ReadAsStringAsync();
+                JObject obj = JObject.Parse(res);
+
+                Customer c = new Customer(
+                    (string)obj["_id"],
+                    (string)obj["card"],
                     (string)obj["name"],
                     (int?)obj["number"],
                     (string)obj["address"],
@@ -231,10 +268,11 @@ namespace Stella.API
         /// Adds customer using the API.
         /// </summary>
         /// <returns>True if added successfully, false otherwise</returns>
-        public async void AddCustomer(string name, int? number, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
+        public async void AddCustomer(string name, string card, int? number, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
         {
             var body = new JObject();
             body["name"] = name;
+            body["card"] = card;
             if(number != null) body["number"] = number;
             body["address"] = address;
             body["phone"] = phone;

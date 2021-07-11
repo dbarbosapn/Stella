@@ -124,6 +124,15 @@ namespace Stella.Locale {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Card: .
+        /// </summary>
+        public static string card {
+            get {
+                return ResourceManager.GetString("card", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Charge Service.
         /// </summary>
         public static string charge_service {

@@ -34,15 +34,22 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="25" />
                     <RowDefinition Height="20" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
 
-                <TextBlock x:Name="Title" Grid.Row="0" Grid.Column="0" Text="{x:Static locale:Locale.add_customer}" />
+                <materialDesign:PackIcon Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" Kind="CreditCardContactless" Height="25" Width="25" Foreground="LightPink" />
 
-                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,20">
+                <TextBlock x:Name="Title" Grid.Row="1" Grid.Column="0" Text="{x:Static locale:Locale.add_customer}" />
+
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,20">
                     <TextBox TextChanged="Confirm_Validation" x:Name="NameBox" materialDesign:HintAssist.Hint="{x:Static locale:Locale.name}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                        <TextBlock Text="{x:Static locale:Locale.card}" />
+                        <TextBlock x:Name="CardLabel" />
+                    </StackPanel>
                     <TextBox TextChanged="Confirm_Validation" x:Name="NumberBox" materialDesign:HintAssist.Hint="{x:Static locale:Locale.number}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10,0,0" />
                     <TextBox x:Name="AddressBox" materialDesign:HintAssist.Hint="{x:Static locale:Locale.address}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10,0,0" />
                     <TextBox TextChanged="Confirm_Validation" x:Name="PhoneBox" materialDesign:HintAssist.Hint="{x:Static locale:Locale.phone}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10,0,0" />
@@ -60,7 +67,7 @@
                     <TextBox x:Name="NotesBox" materialDesign:HintAssist.Hint="{x:Static locale:Locale.notes}" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Margin="0,10,0,0" TextWrapping="Wrap" AcceptsReturn="True" Height="120" VerticalScrollBarVisibility="Auto" VerticalAlignment="Stretch" />
                 </StackPanel>
 
-                <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button IsEnabled="False" Click="ConfirmButton_Click" x:Name="ConfirmButton" Content="{x:Static locale:Locale.confirm}" Style="{StaticResource MaterialDesignFlatButton}" Margin="0,0,20,0" />
                     <Button Click="CancelButton_Click" x:Name="CancelButton" Content="{x:Static locale:Locale.cancel}" Style="{StaticResource MaterialDesignFlatButton}" />
                 </StackPanel>

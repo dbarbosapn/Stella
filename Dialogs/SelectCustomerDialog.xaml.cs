@@ -2,6 +2,7 @@
 using Stella.Helper;
 using Stella.Models;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 
@@ -18,6 +19,8 @@ namespace Stella.Dialogs
         {
             InitializeComponent();
             LoadCustomers();
+
+            RFIDHelper.Instance.OnReaderDataReceived += OnReaderValue;
         }
 
         /// <summary>
@@ -68,6 +71,31 @@ namespace Stella.Dialogs
             SelectedId = (CustomerList.SelectedItem as Customer).Id;
             DialogResult = true;
             Close();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            RFIDHelper.Instance.OnReaderDataReceived -= OnReaderValue;
+        }
+
+        private void OnReaderValue(string value)
+        {
+            Client.Instance.GetCustomerCard(value, (customer) =>
+            {
+                WindowHelper.Instance.RunOnUIThread(() =>
+                {
+                    if (customer != null)
+                    {
+                        RFIDHelper.Instance.PositiveSignal();
+                        SelectedId = customer.Id;
+                        DialogResult = true;
+                        Close();
+                    }
+                    else RFIDHelper.Instance.NegativeSignal();
+                });
+            });
         }
     }
 }
