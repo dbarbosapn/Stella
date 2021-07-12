@@ -20,7 +20,7 @@ The idea of loading services is for the customers to be able to load RFID busine
 
 The RFID card reader is supposed to be cheap for small businesses. Since the price of one of these equipments is usually around 30-50$, I developed a cheap alternative with arduino which would cost only around 5$.
 
-The code and details of this equipment are on the [stella-reader](stella-reader) folder. for this equipment is on
+The code and details of this equipment are on the [stella-reader](stella-reader) folder.
 
 ## TODO
 
