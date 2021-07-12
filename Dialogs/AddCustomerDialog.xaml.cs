@@ -1,6 +1,7 @@
 ﻿using Stella.Helper;
 using Stella.Models;
 using System;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,12 +27,15 @@ namespace Stella.Dialogs
 
         private void OnReaderValue(string value)
         {
-            if (value != "")
+            WindowHelper.Instance.RunOnUIThread(() =>
             {
-                RFIDHelper.Instance.PositiveSignal();
-                CardLabel.Text = value;
-            }
-            else RFIDHelper.Instance.NegativeSignal();
+                if (value != "")
+                {
+                    RFIDHelper.Instance.PositiveSignal();
+                    CardLabel.Text = value;
+                }
+                else RFIDHelper.Instance.NegativeSignal();
+            });
         }
 
         /// <summary>
@@ -40,6 +44,13 @@ namespace Stella.Dialogs
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            RFIDHelper.Instance.OnReaderDataReceived -= OnReaderValue;
         }
 
         /// <summary>

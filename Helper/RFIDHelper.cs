@@ -37,14 +37,23 @@ namespace Stella.Helper
             foreach (var port in SerialPort.GetPortNames())
             {
                 SerialPort serial = new SerialPort(port, 9600);
-                serial.Open();
+
+                try
+                {
+                    serial.Open();
+                }
+                catch(UnauthorizedAccessException)
+                {
+                    continue;
+                }
+
                 serial.Write("c");
                 await Task.Delay(500);
                 if(serial.BytesToRead > 0)
                 {
                     try
                     {
-                        string r = serial.ReadExisting();
+                        string r = serial.ReadExisting().Trim();
                         if(r == "STELLA_READER")
                         {
                             reader = serial;
@@ -82,7 +91,7 @@ namespace Stella.Helper
         private void OnReaderReceivedData(object sender, SerialDataReceivedEventArgs e)
         {
             string data = reader.ReadExisting();
-            OnReaderDataReceived?.Invoke(data);
+            OnReaderDataReceived?.Invoke(data.Trim());
         }
 
         /// <summary>

@@ -102,7 +102,7 @@ namespace Stella.Pages.Content
             {
                 var r = w.Result;
                 WindowHelper.Instance.SetLoading(true);
-                Client.Instance.EditCustomer(c.Id, r.Name, r.Number, r.Address, r.Phone, r.Email, r.Gender, r.SerializedBirthdate, r.Notes, (added) =>
+                Client.Instance.EditCustomer(c.Id, r.Card, r.Name, r.Number, r.Address, r.Phone, r.Email, r.Gender, r.SerializedBirthdate, r.Notes, (added) =>
                 {
                     WindowHelper.Instance.RunOnUIThread(() =>
                     {

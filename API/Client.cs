@@ -303,10 +303,11 @@ namespace Stella.API
         /// <summary>
         /// Edits customer using the API
         /// </summary>
-        public async void EditCustomer(string id, string name, int? number, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
+        public async void EditCustomer(string id, string card, string name, int? number, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
         {
             var body = new JObject();
             body["name"] = name;
+            body["card"] = card;
             if (number != null) body["number"] = number;
             body["address"] = address;
             body["phone"] = phone;
