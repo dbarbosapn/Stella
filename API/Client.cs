@@ -11,7 +11,7 @@ namespace Stella.API
 {
     public class Client
     {
-        private static string BASE_URL = "https://stella-backend-free.herokuapp.com/";
+        private static string BASE_URL = "https://stellabackend.pmclinic.pt/";
 
         public static Client Instance {
             get {
