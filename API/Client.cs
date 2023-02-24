@@ -22,15 +22,14 @@ namespace Stella.API
         }
         private static Client _instance;
 
-        private HttpClient httpClient;
-        private string token = null;
+        private HttpClient _httpClient;
 
         private Client()
         {
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(BASE_URL);
-            httpClient.DefaultRequestHeaders.Accept.Clear();
-            httpClient.DefaultRequestHeaders.Accept.Add(
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri(BASE_URL);
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
             LoadSettings();
         }
@@ -41,7 +40,11 @@ namespace Stella.API
         private void LoadSettings()
         {
             var settings = Properties.Settings.Default;
-            token = settings.AuthToken == "" ? null : settings.AuthToken.Trim();
+            if (settings.AuthToken != "")
+            {
+                _httpClient.DefaultRequestHeaders.Remove("x-stella-token");
+                _httpClient.DefaultRequestHeaders.Add("x-stella-token", settings.AuthToken.Trim());
+            }
         }
 
         /// <summary>
@@ -52,17 +55,14 @@ namespace Stella.API
         {
             string result = null;
 
-            if (token != null)
-            {
-                var httpRes = await httpClient.GetAsync($"validate-token?token={token}").ConfigureAwait(false);
+            var httpRes = await _httpClient.GetAsync("validate-token").ConfigureAwait(false);
 
-                if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    string res = await httpRes.Content.ReadAsStringAsync();
-                    JObject obj = JObject.Parse(res);
-                    result = (string)obj["name"];
-                }
-            }            
+            if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string res = await httpRes.Content.ReadAsStringAsync();
+                JObject obj = JObject.Parse(res);
+                result = (string)obj["name"];
+            }
 
             callback.Invoke(result);
         }
@@ -73,8 +73,13 @@ namespace Stella.API
         /// <param name="token">Token string to set</param>
         public void SetToken(string token)
         {
-            this.token = token == "" ? null : token.Trim();
-            Properties.Settings.Default.AuthToken = token.Trim();
+            if (token != "")
+            {
+                _httpClient.DefaultRequestHeaders.Remove("x-stella-token");
+                _httpClient.DefaultRequestHeaders.Add("x-stella-token", token.Trim());
+            }
+
+            Properties.Settings.Default.AuthToken = token;
             Properties.Settings.Default.Save();
         }
 
@@ -90,8 +95,8 @@ namespace Stella.API
             body["name"] = name;
             body["notes"] = notes;
 
-            var httpRes = await httpClient
-                .PostAsync($"add-service?token={token}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync("add-service", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -102,13 +107,13 @@ namespace Stella.API
         /// </summary>
         public async void GetServices(Action<List<Service>> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-services?token={token}")
+            var httpRes = await _httpClient
+                .GetAsync("get-services")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JArray arr = JArray.Parse(res);
 
                 List<Service> list = new List<Service>();
@@ -131,8 +136,8 @@ namespace Stella.API
         /// </summary>
         public async void RemoveService(Service service, Action<bool> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"delete-service?token={token}&id={service.Id}")
+            var httpRes = await _httpClient
+                .GetAsync($"delete-service?id={service.Id}")
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -147,8 +152,8 @@ namespace Stella.API
             body["name"] = name;
             body["notes"] = notes;
 
-            var httpRes = await httpClient
-                .PostAsync($"edit-service?token={token}&id={id}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync($"edit-service?id={id}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -159,13 +164,13 @@ namespace Stella.API
         /// </summary>
         public async void GetCustomers(Action<List<Customer>> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-customers?token={token}")
+            var httpRes = await _httpClient
+                .GetAsync("get-customers")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JArray arr = JArray.Parse(res);
 
                 List<Customer> list = new List<Customer>();
@@ -176,6 +181,7 @@ namespace Stella.API
                         (string)obj["card"],
                         (string)obj["name"],
                         (int?)obj["number"],
+                        (string)obj["pin"],
                         (string)obj["address"],
                         (string)obj["phone"],
                         (string)obj["email"],
@@ -199,13 +205,13 @@ namespace Stella.API
         /// </summary>
         public async void GetCustomer(string customerId, Action<Customer> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-customer?token={token}&id={customerId}")
+            var httpRes = await _httpClient
+                .GetAsync($"get-customer?id={customerId}")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JObject obj = JObject.Parse(res);
 
                 Customer c = new Customer(
@@ -213,6 +219,7 @@ namespace Stella.API
                     (string)obj["card"],
                     (string)obj["name"],
                     (int?)obj["number"],
+                    (string)obj["pin"],
                     (string)obj["address"],
                     (string)obj["phone"],
                     (string)obj["email"],
@@ -234,13 +241,13 @@ namespace Stella.API
         /// </summary>
         public async void GetCustomerCard(string card, Action<Customer> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-customer-card?token={token}&card={card}")
+            var httpRes = await _httpClient
+                .GetAsync($"get-customer-card?card={card}")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JObject obj = JObject.Parse(res);
 
                 Customer c = new Customer(
@@ -248,6 +255,7 @@ namespace Stella.API
                     (string)obj["card"],
                     (string)obj["name"],
                     (int?)obj["number"],
+                    (string)obj["pin"],
                     (string)obj["address"],
                     (string)obj["phone"],
                     (string)obj["email"],
@@ -268,12 +276,12 @@ namespace Stella.API
         /// Adds customer using the API.
         /// </summary>
         /// <returns>True if added successfully, false otherwise</returns>
-        public async void AddCustomer(string name, string card, int? number, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
+        public async void AddCustomer(string name, string card, string pin, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
         {
             var body = new JObject();
             body["name"] = name;
             body["card"] = card;
-            if(number != null) body["number"] = number;
+            body["pin"] = pin;
             body["address"] = address;
             body["phone"] = phone;
             body["email"] = email;
@@ -281,8 +289,8 @@ namespace Stella.API
             if(birthdate != "") body["birthdate"] = birthdate;
             body["notes"] = notes;
 
-            var httpRes = await httpClient
-                .PostAsync($"add-customer?token={token}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync("add-customer", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -293,8 +301,8 @@ namespace Stella.API
         /// </summary>
         public async void RemoveCustomer(Customer customer, Action<bool> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"delete-customer?token={token}&id={customer.Id}")
+            var httpRes = await _httpClient
+                .GetAsync($"delete-customer?id={customer.Id}")
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -303,12 +311,12 @@ namespace Stella.API
         /// <summary>
         /// Edits customer using the API
         /// </summary>
-        public async void EditCustomer(string id, string card, string name, int? number, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
+        public async void EditCustomer(string id, string card, string pin, string name, string address, string phone, string email, string gender, string birthdate, string notes, Action<bool> callback)
         {
             var body = new JObject();
             body["name"] = name;
             body["card"] = card;
-            if (number != null) body["number"] = number;
+            body["pin"] = pin;
             body["address"] = address;
             body["phone"] = phone;
             body["email"] = email;
@@ -316,8 +324,8 @@ namespace Stella.API
             if (birthdate != "") body["birthdate"] = birthdate;
             body["notes"] = notes;
 
-            var httpRes = await httpClient
-                .PostAsync($"edit-customer?token={token}&id={id}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync($"edit-customer?id={id}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -331,11 +339,11 @@ namespace Stella.API
         {
             var body = new JObject();
             body["customer"] = customerId;
-            body["service"] = serviceName;
+            body["serviceName"] = serviceName;
             body["quantity"] = quantity;
 
-            var httpRes = await httpClient
-                .PostAsync($"add-records?token={token}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync("add-records", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -346,19 +354,19 @@ namespace Stella.API
         /// </summary>
         public async void GetRecords(string customerId, Action<List<AccumulatedRecord>> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-records?token={token}&customer={customerId}")
+            var httpRes = await _httpClient
+                .GetAsync($"get-records?customer={customerId}")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JArray arr = JArray.Parse(res);
 
                 var dict = new Dictionary<string, AccumulatedRecord>();
                 foreach (var obj in arr.Children<JObject>())
                 {
-                    string serviceName = (string)obj["service"];
+                    string serviceName = (string)obj["serviceName"];
                     string cid = (string)obj["customer"];
                     string rid = (string)obj["_id"];
 
@@ -381,8 +389,8 @@ namespace Stella.API
         /// </summary>
         public async void RemoveRecord(string recordId, Action<bool> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"delete-record?token={token}&id={recordId}")
+            var httpRes = await _httpClient
+                .GetAsync($"delete-record?id={recordId}")
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -396,13 +404,13 @@ namespace Stella.API
         {
             var body = new JObject();
             body["customer"] = customerId;
-            body["service"] = serviceName;
+            body["serviceName"] = serviceName;
             body["date"] = $"{date.Year}-{date.Month}-{date.Day} {date.Hour}:{date.Minute}";
             if(single) body["single"] = true;
             body["notes"] = notes;
 
-            var httpRes = await httpClient
-                .PostAsync($"add-transaction?token={token}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync("add-transaction", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -413,13 +421,13 @@ namespace Stella.API
         /// </summary>
         public async void GetTransactions(string customerId, Action<List<Transaction>> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-transactions?token={token}&customer={customerId}")
+            var httpRes = await _httpClient
+                .GetAsync($"get-transactions?customer={customerId}")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JArray arr = JArray.Parse(res);
 
                 List<Transaction> list = new List<Transaction>();
@@ -428,7 +436,7 @@ namespace Stella.API
                     Transaction t = new Transaction(
                         (string)obj["_id"],
                         (DateTime?)obj["date"],
-                        (string)obj["service"],
+                        (string)obj["serviceName"],
                         (bool)obj["single"],
                         (string)obj["notes"]);
 
@@ -448,8 +456,8 @@ namespace Stella.API
         /// </summary>
         public async void RemoveTransaction(Transaction t, Action<bool> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"delete-transaction?token={token}&id={t.Id}")
+            var httpRes = await _httpClient
+                .GetAsync($"delete-transaction?id={t.Id}")
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -464,8 +472,8 @@ namespace Stella.API
             var body = new JObject();
             body["notes"] = notes;
 
-            var httpRes = await httpClient
-                .PostAsync($"edit-transaction-notes?token={token}&id={transactionId}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
+            var httpRes = await _httpClient
+                .PostAsync($"edit-transaction-notes?id={transactionId}", new StringContent(body.ToString(), Encoding.UTF8, "application/json"))
                 .ConfigureAwait(false);
 
             callback(httpRes.StatusCode == System.Net.HttpStatusCode.OK);
@@ -476,13 +484,13 @@ namespace Stella.API
         /// </summary>
         public async void GetStats(Action<Stats> callback)
         {
-            var httpRes = await httpClient
-                .GetAsync($"get-stats?token={token}")
+            var httpRes = await _httpClient
+                .GetAsync("get-stats")
                 .ConfigureAwait(false);
 
             if (httpRes.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                string res = await httpRes.Content.ReadAsStringAsync();
+                string res = await httpRes.Content.ReadAsStringAsync().ConfigureAwait(false);
                 JObject obj = JObject.Parse(res);
 
                 Stats s = new Stats(

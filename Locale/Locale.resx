@@ -357,4 +357,10 @@
   <data name="stella_reader" xml:space="preserve">
     <value>Stella Reader</value>
   </data>
+  <data name="number_label" xml:space="preserve">
+    <value>Number:</value>
+  </data>
+  <data name="pin" xml:space="preserve">
+    <value>Pin</value>
+  </data>
 </root>

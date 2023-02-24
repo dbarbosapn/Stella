@@ -81,6 +81,7 @@ namespace Stella.Windows
                     {
                         NumberLabel.Text = customer.Number.ToString();
                         NameLabel.Text = customer.Name;
+                        PinLabel.Text = customer.Pin;
                         AddressLabel.Text = customer.Address;
                         PhoneLabel.Text = customer.Phone;
                         EmailLabel.Text = customer.Email;

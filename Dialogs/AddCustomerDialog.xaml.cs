@@ -61,13 +61,9 @@ namespace Stella.Dialogs
             DialogResult = true;
 
             var date = BirthdatePicker.SelectedDate;
+            var pin = string.IsNullOrEmpty(PinBox.Text) ? null : PinBox.Text.Trim();
 
-            int? number = null;
-            int tmp;
-            if (int.TryParse(NumberBox.Text, out tmp))
-                number = tmp;
-
-            Result = new Customer("", CardLabel.Text, NameBox.Text, number, AddressBox.Text, PhoneBox.Text, EmailBox.Text, ((ComboBoxItem)GenderSelector.SelectedItem).Tag.ToString(), date, NotesBox.Text);
+            Result = new Customer("", CardLabel.Text, NameBox.Text, null, pin, AddressBox.Text, PhoneBox.Text, EmailBox.Text, ((ComboBoxItem)GenderSelector.SelectedItem).Tag.ToString(), date, NotesBox.Text);
 
             Close();
         }
@@ -89,7 +85,8 @@ namespace Stella.Dialogs
         {
             bool enabled = true;
 
-            if (NumberBox.Text != "" && !Regex.IsMatch(PhoneBox.Text, "^[+]?[0-9]*?$"))
+            if (PinBox.Text != "" && !Regex.IsMatch(PinBox.Text, "^[0-9]+$"))
+                enabled = false;
 
             if (PhoneBox.Text != "" && !Regex.IsMatch(PhoneBox.Text, "^[0-9]+$"))
                 enabled = false;
@@ -110,8 +107,9 @@ namespace Stella.Dialogs
         public void SetEdit(Customer c)
         {
             NameBox.Text = c.Name;
-            CardLabel.Text = c.Card;
-            NumberBox.Text = c.Number.ToString();
+            CardLabel.Text = c.Card != null ? $" {c.Card}" : "";
+            NumberLabel.Text = c.Number != null ? $" {c.Number}" : "";
+            PinBox.Text = c.Pin;
             AddressBox.Text = c.Address;
             PhoneBox.Text = c.Phone;
             EmailBox.Text = c.Email;

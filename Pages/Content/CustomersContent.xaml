@@ -58,6 +58,7 @@
                     <GridViewColumn Header="Id" Width="0" DisplayMemberBinding="{Binding Id}" />
                     <GridViewColumn Header="#" Width="Auto" DisplayMemberBinding="{Binding Number}" />
                     <GridViewColumn Header="{x:Static locale:Locale.name}" Width="Auto" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="{x:Static locale:Locale.pin}" Width="Auto" DisplayMemberBinding="{Binding Pin}" />
                     <GridViewColumn Header="{x:Static locale:Locale.address}" Width="150" DisplayMemberBinding="{Binding Address}" />
                     <GridViewColumn Header="{x:Static locale:Locale.phone}" Width="Auto" DisplayMemberBinding="{Binding Phone}" />
                     <GridViewColumn Header="{x:Static locale:Locale.email}" Width="150" DisplayMemberBinding="{Binding Email}" />

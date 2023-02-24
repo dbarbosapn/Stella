@@ -8,6 +8,7 @@ namespace Stella.Models
         public string Card { get; set; }
         public string Name { get; set; }
         public int? Number { get; set; }
+        public string Pin { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
@@ -64,12 +65,13 @@ namespace Stella.Models
         public string SerializedNotes { get; private set; }
         public string SerializedGender { get; private set; }
 
-        public Customer(string id, string card, string name, int? number, string address, string phone, string email, string gender, DateTime? birthdate, string notes)
+        public Customer(string id, string card, string name, int? number, string pin, string address, string phone, string email, string gender, DateTime? birthdate, string notes)
         {
             Id = id;
             Card = card;
             Name = name;
             Number = number;
+            Pin = pin;
             Address = address;
             Phone = phone;
             Email = email;
